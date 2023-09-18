@@ -8,7 +8,8 @@ const {
     createTour,
     updateTour,
     deleteTour,
-    checkID
+    checkID,
+    checkPostBody
 } = require('./../controllers/tourControllers');
 
 const router = express.Router();
@@ -16,9 +17,14 @@ const router = express.Router();
 // Param middleware, we take an action when 'id' param is passed.
 router.param('id', checkID);
 
+// Create a checkbody middleware
+// Check if body contains name and price property.
+// If not, send back 400 (bad request).
+// Add it to the post handler stack.
+
 router.route('/')
     .get(getAllTours)
-    .post(createTour);
+    .post(checkPostBody, createTour);
 
 router.route('/:id')
     .get(getTourById)

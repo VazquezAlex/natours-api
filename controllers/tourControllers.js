@@ -17,6 +17,19 @@ const checkID = (req, res, next, val) => {
     next();
 }
 
+const checkPostBody = (req, res, next) => {
+    const { name, price } = req.body;
+
+    if (!name || !price) {
+        return res.status(400).json({
+            status: 'failed',
+            message: 'Invalid data. Please send all the required information'
+        });
+    }
+
+    next();
+}
+
 const getAllTours = (req, res) => {
     console.log(req.requestTime);
     res.status(200).json({
@@ -86,4 +99,5 @@ module.exports = {
     updateTour,
     deleteTour,
     checkID,
+    checkPostBody,
 }
