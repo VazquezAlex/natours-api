@@ -17,6 +17,9 @@ app.use(morgan('dev'));
 // Middleware to use json from body objects.
 app.use(express.json());
 
+// Middle to serve static files.
+app.use(express.static(`${ __dirname }/public`));
+
 // Adding our own middleware.
 app.use((req, res, next) => {
     console.log('Hello from the middleware 👇🏻');
