@@ -10,12 +10,26 @@ const app = express();
 // Middleware to use json from body objects.
 app.use(express.json());
 
+// Adding our own middleware.
+app.use((req, res, next) => {
+    console.log('Hello from the middleware 👇🏻');
+    next();
+});
+
+// Updating the request object on our own middleware.
+app.use((req, res, next) => {
+    req.requestTime = new Date().toISOString();
+    next();
+});
+
 // Extract the data for the tours.
 const tours = JSON.parse(fs.readFileSync(`${ __dirname }/dev-data/data/tours-simple.json`));
 
 const getAllTours = (req, res) => {
+    console.log(req.requestTime);
     res.status(200).json({
         status: 'success',
+        time: req.requestTime,
         results: tours.length,
         data: { 
             tours: tours
