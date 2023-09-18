@@ -7,10 +7,14 @@ const {
     getTourById,
     createTour,
     updateTour,
-    deleteTour
+    deleteTour,
+    checkID
 } = require('./../controllers/tourControllers');
 
 const router = express.Router();
+
+// Param middleware, we take an action when 'id' param is passed.
+router.param('id', checkID);
 
 router.route('/')
     .get(getAllTours)

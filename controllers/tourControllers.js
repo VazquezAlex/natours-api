@@ -4,6 +4,19 @@ const fs = require('fs');
 // Extract the data for the tours.
 const tours = JSON.parse(fs.readFileSync(`${ __dirname }/../dev-data/data/tours-simple.json`));
 
+const checkID = (req, res, next, val) => {
+    const tour = tours.find(tour => tour.id === val * 1);
+
+    if (!tour) {
+        return res.status(404).json({
+            status: 'failed',
+            message: 'Invalid ID. We could not find this tour.'
+        });
+    }
+
+    next();
+}
+
 const getAllTours = (req, res) => {
     console.log(req.requestTime);
     res.status(200).json({
@@ -19,13 +32,6 @@ const getAllTours = (req, res) => {
 const getTourById = (req, res) => {
     const id = req.params.id * 1; // We convert it to number.
     const tour = tours.find(tour => tour.id === id);
-
-    if (!tour) {
-        return res.status(404).json({
-            status: 'failed',
-            message: 'Invalid ID. We could not find this tour.'
-        });
-    }
 
     res.status(200).json({
         status: 'success',
@@ -55,13 +61,6 @@ const updateTour = (req, res) => {
     const id = req.params.id * 1;
     const tour = tours.find(tour => tour.id === id);
 
-    if (!tour) {
-        return res.status(404).json({
-            status: 'failed',
-            message: 'Invalid ID. We could not find this tour.'
-        });
-    }
-
     res.status(200).json({
         status: 'success',
         data: {
@@ -74,13 +73,6 @@ const deleteTour = (req, res) => {
     const id = req.params.id * 1;
     const tour = tours.find(tour => tour.id === id);
 
-    if (!tour) {
-        return res.status(404).json({
-            status: 'failed',
-            message: 'Invalid ID. We could not find this tour.'
-        });
-    }
-
     res.status(204).json({
         status: 'success',
         data: null
@@ -92,5 +84,6 @@ module.exports = {
     getTourById,
     createTour,
     updateTour,
-    deleteTour
+    deleteTour,
+    checkID,
 }
