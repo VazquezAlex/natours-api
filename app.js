@@ -12,7 +12,9 @@ const app = express();
 // Middlewares 👇🏻.
 
 // Third party middleware.
-app.use(morgan('dev'));
+if (process.env.NODE_ENV === 'development') {
+    app.use(morgan('dev'));
+}
 
 // Middleware to use json from body objects.
 app.use(express.json());
