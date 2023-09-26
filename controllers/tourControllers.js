@@ -110,14 +110,23 @@ const updateTour = async (req, res) => {
 
 }
 
-const deleteTour = (req, res) => {
-    const id = req.params.id * 1;
-    const tour = tours.find(tour => tour.id === id);
+const deleteTour = async (req, res) => {
 
-    res.status(204).json({
-        status: 'success',
-        data: null
-    })
+    try {
+
+        await Tour.findByIdAndDelete(req.params.id); 
+        
+        res.status(204).json({
+            status: 'success',
+            data: null
+        })
+    } catch (e) {
+        res.status(400).json({
+            status: 'failed',
+            message: "Failed deleting"
+        })
+    }
+
 }
 
 module.exports = {
