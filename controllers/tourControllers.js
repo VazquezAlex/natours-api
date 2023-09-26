@@ -82,15 +82,32 @@ const createTour = async (req, res) => {
     }
 }
 
-const updateTour = (req, res) => {
-    const id = req.params.id * 1;
+const updateTour = async (req, res) => {
+    
+    try {
+        const tour = await Tour.findByIdAndUpdate(
+            req.params.id, // ID we are updating.
+            req.body,      // Data passed from the body.
+            {
+                new: true, // Returns the new document here.
+                runValidators: true,
+            }
+        )
+        
+        res.status(200).json({
+            status: 'success',
+            data: {
+                tour: tour
+            }
+        })
 
-    res.status(200).json({
-        status: 'success',
-        data: {
-            tour: '<Updated tour here>'
-        }
-    })
+    } catch (e) {
+        res.status(400).json({
+            status: 'failed',
+            message: "Failed updating"
+        })
+    }
+
 }
 
 const deleteTour = (req, res) => {
