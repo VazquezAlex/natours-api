@@ -16,28 +16,50 @@ const checkPostBody = (req, res, next) => {
     next();
 }
 
-const getAllTours = (req, res) => {
-    console.log(req.requestTime);
-    res.status(200).json({
-        status: 'success',
-        time: req.requestTime,
-        // results: tours.length,
-        // data: { 
-        //     tours: tours
-        // }
-    });
+const getAllTours = async (req, res) => {
+    
+    try {
+        // Call all the tours with mongoose.
+        const tours = await Tour.find();
+    
+        res.status(200).json({
+            status: 'success',
+            time: req.requestTime,
+            results: tours.length,
+            data: { 
+                tours: tours
+            }
+        });
+    } catch (err) {
+        res.status(400).json({
+            status: 'failed',
+            message: 'Failed getting the data.'
+        })
+    }
+
 }
 
-const getTourById = (req, res) => {
-    const id = req.params.id * 1; // We convert it to number.
-    // const tour = tours.find(tour => tour.id === id);
+const getTourById = async (req, res) => {
 
-    res.status(200).json({
-        status: 'success',
-        // data: { 
-        //     tour: tour
-        // }
-    });
+    try {
+        // Get the tour by id with mongoose.
+        const tour = await Tour.findById(req.params.id);
+        // Tour.findOne({ _id: req.params.id });
+    
+        res.status(200).json({
+            status: 'success',
+            data: { 
+                tour: tour
+            }
+        });
+
+    } catch (err) {
+        res.status(400).json({
+            status: 'failed',
+            message: 'Failed getting the data.'
+        })
+    }
+    
 }
 
 const createTour = async (req, res) => {
