@@ -5,6 +5,7 @@ const express = require('express');
 const {
     aliasTopTours,
     getAllTours,
+    getMonthlyPlan,
     getTourById,
     getTourStats,
     createTour,
@@ -24,6 +25,7 @@ const router = express.Router();
 // Add it to the post handler stack.
 
 router.route('/tour-stats').get(getTourStats);
+router.route('/monthly-plan/:year').get(getMonthlyPlan);
 
 router.route('/top-5-tours')
     .get(aliasTopTours, getAllTours)
