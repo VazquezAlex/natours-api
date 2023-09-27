@@ -38,6 +38,7 @@ const tourSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now(),
+        createdAt: false, // Hide this permanently from the output.
     },
     images: {
         type: [String]
