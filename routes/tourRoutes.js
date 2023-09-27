@@ -3,6 +3,7 @@ const express = require('express');
 
 // Local imports.
 const {
+    aliasTopTours,
     getAllTours,
     getTourById,
     createTour,
@@ -20,6 +21,9 @@ const router = express.Router();
 // Check if body contains name and price property.
 // If not, send back 400 (bad request).
 // Add it to the post handler stack.
+
+router.route('/top-5-tours')
+    .get(aliasTopTours, getAllTours)
 
 router.route('/')
     .get(getAllTours)

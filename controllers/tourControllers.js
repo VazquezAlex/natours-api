@@ -16,6 +16,14 @@ const checkPostBody = (req, res, next) => {
     next();
 }
 
+const aliasTopTours = (req, res, next) => {
+    req.query.limit = '5';
+    req.query.sort = '-ratingsAverage,price';
+    req.query.fields = 'name,price,ratings,ratingsAverage,difficulty';
+
+    next();
+}
+
 const getAllTours = async (req, res) => {
     
     try {
@@ -173,6 +181,7 @@ const deleteTour = async (req, res) => {
 }
 
 module.exports = {
+    aliasTopTours,
     getAllTours,
     getTourById,
     createTour,
