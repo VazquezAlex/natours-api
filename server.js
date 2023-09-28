@@ -7,6 +7,17 @@ dotenv.config({ path: './config.env' });
 // Local imports
 const app = require('./app');
 
+// Catch uncaught exceptions.
+process.on('uncaughtException', (err) => {
+    console.log('UNCAUGHT EXCEPTION! Shuting down...')
+    console.log(err.name, err.message);
+
+    // Exit with exception.
+    process.exit(1);
+    // TODO: Here we should restart the app.
+});
+
+// Make the DB connection string.
 const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD);
 
 // Connect to mongo.
@@ -25,7 +36,7 @@ const server = app.listen(port, () => {
     console.log(`App running on port ${ port }...`);
 });
 
-// Handle unhandled rejections.
+// Catch unhandled rejections.
 process.on('unhandledRejection', (err) => {
     console.log(err.name, err.message);
     console.log('UNHANDLED REJECTION! Shuting down...')
