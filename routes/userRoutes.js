@@ -10,8 +10,17 @@ const {
     deleteUser
 } = require('./../controllers/userController');
 
+const {
+    signUp
+} = require('./../controllers/authController');
+
 const router = express.Router();
 
+// Auth routes 👇🏻.
+router.post('/signup', signUp);
+
+
+// User routes 👇🏻.
 router.route('/')
     .get(getAllUsers)
     .post(createUser);
