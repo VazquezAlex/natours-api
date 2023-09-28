@@ -11,13 +11,15 @@ const {
 } = require('./../controllers/userController');
 
 const {
-    signUp
+    login,
+    signUp, 
 } = require('./../controllers/authController');
 
 const router = express.Router();
 
 // Auth routes 👇🏻.
 router.post('/signup', signUp);
+router.post('/login', login);
 
 
 // User routes 👇🏻.

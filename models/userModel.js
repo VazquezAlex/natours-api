@@ -21,6 +21,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please provide a password'],
         minLength: [8, 'Password must have at least 8 characters.'],
+        select: false, // Don't show the password on any output.
     },
     passwordConfirm: {
         type: String,
@@ -49,6 +50,11 @@ userSchema.pre('save', async function(next) {
     // We pass to the next middleware.
     next();
 });
+
+// Instance method to unhash the password.
+userSchema.methods.correctPassword = async function(candidatesPassword, userPassword) {
+    return await bcrypt.compare(candidatesPassword, userPassword);
+}
 
 const User = mongoose.model('User', userSchema);
 
