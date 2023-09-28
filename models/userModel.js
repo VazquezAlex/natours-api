@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -25,12 +26,28 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please confirm your password'],
         validate: {
+            // This only works on .create() and .save();
             validator: function(val) {
                 return val === this.password;
             },
             message: 'The passwords need to match' 
         }
     }
+});
+
+// Middleware to hash our password, before saving the user.
+userSchema.pre('save', async function(next) {
+    // If the password has not being modified, we move no the next middleware.
+    if (!this.isModified('password')) return next();
+
+    // Hash the password with bcrypt, the higher the number the safer, but more costly.
+    this.password = await bcrypt.hash(this.password, 12);
+
+    // We don't want to send the confirmation to the DB, so we delete it.
+    this.passwordConfirm = undefined;
+
+    // We pass to the next middleware.
+    next();
 });
 
 const User = mongoose.model('User', userSchema);
