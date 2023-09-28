@@ -168,9 +168,9 @@ const getTourStats = async (req, res) => {
             {
                 $sort: { minPrice: 1 }
             },
-            {
-                $match: { _id: { $ne: 'EASY' } }
-            }
+            // {
+            //     $match: { _id: { $ne: 'EASY' } }
+            // }
         ]);
 
         res.status(200).json({
