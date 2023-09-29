@@ -1,3 +1,7 @@
+// Core imports.
+const crypto = require('crypto');
+
+// Third party imports.
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
@@ -41,7 +45,21 @@ const userSchema = new mongoose.Schema({
     },
     passwordChangedAt: {
         type: Date
+    },
+    passwordResetToken: {
+        type: String,
+    },
+    passwordResetExpires: {
+        type: Date,
     }
+});
+
+// Before saving the user, we verify if the password was updated, if so, we updated the passwrodChangedAt property.
+userSchema.pre('save', function(next) {
+    if (!this.isModified('password') || this.isNew) return next();
+
+    this.passwordChangedAt = Date.now() - 1000;
+    next();
 });
 
 // Middleware to hash our password, before saving the user.
@@ -62,7 +80,7 @@ userSchema.pre('save', async function(next) {
 // Instance method to unhash the password.
 userSchema.methods.correctPassword = async function(candidatesPassword, userPassword) {
     return await bcrypt.compare(candidatesPassword, userPassword);
-}
+};
 
 // Instance method to get if the password was changed after the token was issued.
 userSchema.methods.changedPasswordAfter = function(JWTTimestamp) {
@@ -73,7 +91,23 @@ userSchema.methods.changedPasswordAfter = function(JWTTimestamp) {
     }
 
     return false;
-}
+};
+
+// Instance method to get a unique token for forgotten password.
+userSchema.methods.createPasswordResetToken = function() {
+    const resetToken = crypto.randomBytes(32).toString('hex');
+
+    // We hash/encrypt the token for the user and store it on the data base field.
+    this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+
+    // We set the expire time for 10 minutes.
+    this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+
+    console.log({ resetToken }, this.passwordResetToken);
+    
+    return resetToken;
+};
+
 
 const User = mongoose.model('User', userSchema);
 
