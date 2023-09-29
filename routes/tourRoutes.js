@@ -13,6 +13,7 @@ const {
     deleteTour,
     checkPostBody,
 } = require('./../controllers/tourControllers');
+const { protect } = require('../controllers/authController');
 
 const router = express.Router();
 
@@ -30,8 +31,8 @@ router.route('/monthly-plan/:year').get(getMonthlyPlan);
 router.route('/top-5-tours')
     .get(aliasTopTours, getAllTours)
 
-router.route('/')
-    .get(getAllTours)
+    router.route('/')
+    .get(protect, getAllTours)
     .post(checkPostBody, createTour);
 
 router.route('/:id')

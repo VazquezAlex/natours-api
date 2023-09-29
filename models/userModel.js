@@ -33,6 +33,9 @@ const userSchema = new mongoose.Schema({
             },
             message: 'The passwords need to match' 
         }
+    },
+    passwordChangedAt: {
+        type: Date
     }
 });
 
@@ -54,6 +57,17 @@ userSchema.pre('save', async function(next) {
 // Instance method to unhash the password.
 userSchema.methods.correctPassword = async function(candidatesPassword, userPassword) {
     return await bcrypt.compare(candidatesPassword, userPassword);
+}
+
+// Instance method to get if the password was changed after the token was issued.
+userSchema.methods.changedPasswordAfter = function(JWTTimestamp) {
+    if (this.passwordChangedAt) {
+        const changedTimestamp = parseInt(this.passwordChangedAt.getTime() / 1000, 10);
+        
+        return changedTimestamp > JWTTimestamp;
+    }
+
+    return false;
 }
 
 const User = mongoose.model('User', userSchema);
