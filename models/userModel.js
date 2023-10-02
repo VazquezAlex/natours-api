@@ -51,7 +51,19 @@ const userSchema = new mongoose.Schema({
     },
     passwordResetExpires: {
         type: Date,
+    },
+    active: {
+        type: Boolean,
+        default: true,
+        select: false,
     }
+});
+
+// Before getting the users, we filter the active: false accounts.
+userSchema.pre(/^find/, function(next) {
+    this.find({ active: { $ne: false } });
+
+    next();
 });
 
 // Before saving the user, we verify if the password was updated, if so, we updated the passwrodChangedAt property.

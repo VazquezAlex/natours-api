@@ -9,6 +9,7 @@ const {
     getUser,
     updateMe,
     updateUser,
+    deleteMe,
 } = require('./../controllers/userController');
 
 const {
@@ -35,6 +36,7 @@ router.route('/')
     .post(createUser);
 
 router.patch('/updateMe', protect, updateMe);
+router.delete('/deleteMe', protect, deleteMe);
 
 router.route('/:id')
     .get(getUser)
