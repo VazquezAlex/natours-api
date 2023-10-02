@@ -3,6 +3,8 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
 
 // Local import modules.
 const AppError = require('./utils/appError');
@@ -34,6 +36,11 @@ app.use('/api', limiter);
 // Middleware to use json from body objects.
 app.use(express.json({ limit: '10kb' }));
 
+// Data sanitization againt NoSQL query injection.
+app.use(mongoSanitize());
+
+// Data sanitization againt XSS (cross site attacks).
+app.use(xss());
 
 // Middle to serve static files.
 app.use(express.static(`${ __dirname }/public`));
