@@ -1,6 +1,7 @@
 // Third party modules.
 const express = require('express');
 const morgan = require('morgan');
+const rateLimit = require('express-rate-limit');
 
 // Local import modules.
 const AppError = require('./utils/appError');
@@ -18,8 +19,18 @@ if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 
+// Limit the amount of calls from the same IP.
+const limiter = rateLimit({
+    max: 100,                  // Number of request from the same IP, adapt to each application.
+    windowMs: 60 * 60 * 1000,  // In which window of time in milliseconds (1 hours here).
+    message: 'Too many requests from this IP, please try again in an hour!'
+});
+
+app.use('/api', limiter);
+
 // Middleware to use json from body objects.
 app.use(express.json());
+
 
 // Middle to serve static files.
 app.use(express.static(`${ __dirname }/public`));

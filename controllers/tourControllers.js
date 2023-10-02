@@ -40,7 +40,7 @@ const getAllTours = catchAsync(async (req, res, next) => {
 
     const tours = await features.query;
 
-    res.status(200).json({
+    return res.status(200).json({
         status: 'success',
         time: req.requestTime,
         results: tours.length,
