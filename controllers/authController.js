@@ -39,7 +39,7 @@ const signUp = catchAsync(async (req, res, next) => {
         role: req.body.role
     });
 
-    createSendToken(newUser._id, 201, res);
+    createSendToken(newUser, 201, res);
 });
 
 const login = catchAsync(async (req, res, next) => {
