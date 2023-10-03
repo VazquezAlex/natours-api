@@ -32,15 +32,10 @@ const reviewSchema = new mongoose.Schema({
 
 // Middleware to populate the user and tour.
 reviewSchema.pre(/^find/, function(next) {
-    this.populate({
-        path: 'tour',
-        select: '-secretTour -__v'
-    });
-    this.populate({
-        path: 'user',
-        select: '-__v -passwordChangedAt'
-    });
-
+    this
+        .populate({ path: 'tour', select: 'name' })
+        .populate({ path: 'user', select: 'name photo' });
+        
     next();
 });
 
