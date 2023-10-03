@@ -14,6 +14,7 @@ const {
     checkPostBody,
 } = require('./../controllers/tourControllers');
 const { protect, restrictTo } = require('../controllers/authController');
+const reviewRouter = require('./../routes/reviewRoutes'); 
 
 const router = express.Router();
 
@@ -24,6 +25,8 @@ const router = express.Router();
 // Check if body contains name and price property.
 // If not, send back 400 (bad request).
 // Add it to the post handler stack.
+
+router.use('/:tourId/reviews', reviewRouter);
 
 router.route('/tour-stats').get(getTourStats);
 router.route('/monthly-plan/:year').get(getMonthlyPlan);
