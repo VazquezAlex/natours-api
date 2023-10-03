@@ -138,6 +138,7 @@ tourSchema.pre('save', function(next) {
 // })
 
 // QUERY MIDDLEWARE.
+// Only display tour that are not secret.
 tourSchema.pre(/^find/, function(next) {
     this.find({ secretTour: { $ne: true } });
 
@@ -145,12 +146,24 @@ tourSchema.pre(/^find/, function(next) {
     next();
 });
 
+// Populate the guides on every find query.
+tourSchema.pre(/^find/, function(next) {
+    this.populate({
+        path: 'guides',                   // Field we are populating.
+        select: '-__v -passwordChangedAt' // Fields to display (or hide in this case).
+    });
+    
+    next();
+});
+
+// Display how much time the query took to execute.
 tourSchema.post(/^find/, function(docs, next) {
     console.log(`Query took ${ Date.now() - this.start } ms.`);
     // console.log(docs);
-
+    
     next();
 });
+
 
 // AGGREGATION MIDDLEWARE.
 tourSchema.pre('aggregate', function(next) {
