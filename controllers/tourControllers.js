@@ -53,7 +53,7 @@ const getAllTours = catchAsync(async (req, res, next) => {
 const getTourById = catchAsync(async (req, res, next) => {
 
     // Get the tour by id with mongoose.
-    const tour = await Tour.findById(req.params.id);
+    const tour = await Tour.findById(req.params.id).populate('reviews');
     // Another way of searching: Tour.findOne({ _id: req.params.id });
 
     if (!tour) {
