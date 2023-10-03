@@ -1,6 +1,7 @@
 // Local imports.
 const catchAsync = require('../utils/catchAsync');
 const Review = require('./../models/reviewModel');
+const factory = require('./handlerFactory');
 
 const getAllReviews = catchAsync(async (req, res, next) => {
 
@@ -34,7 +35,10 @@ const saveReview = catchAsync(async (req, res, next) => {
     });
 })
 
+const deleteReview = factory.deleteOne(Review);
+
 module.exports = {
+    deleteReview,
     getAllReviews,
     saveReview
 }

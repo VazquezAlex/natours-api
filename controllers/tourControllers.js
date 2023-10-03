@@ -5,6 +5,7 @@ const APIFeatures = require('./../utils/apiFeatures');
 const AppError = require('../utils/appError');
 const Tour = require('./../models/tourModels');
 const catchAsync = require('../utils/catchAsync');
+const factory = require('./handlerFactory');
 
 const checkPostBody = (req, res, next) => {
     const { name, price } = req.body;
@@ -109,21 +110,7 @@ const updateTour = catchAsync(async (req, res, next) => {
     })
 })
 
-const deleteTour = catchAsync(async (req, res, next) => {
-
-    const tour = await Tour.findByIdAndDelete(req.params.id); 
-
-    if (!tour) {
-        const error = new AppError('No tour found with that ID.', 404);
-
-        return next(error);
-    }
-    
-    res.status(204).json({
-        status: 'success',
-        data: null
-    });
-})
+const deleteTour = factory.deleteOne(Tour);
 
 const getTourStats = catchAsync(async (req, res, next) => {
 
