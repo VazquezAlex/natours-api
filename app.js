@@ -11,6 +11,7 @@ const hpp = require('hpp');
 const AppError = require('./utils/appError');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
+const reviewRouter = require('./routes/reviewRoutes');
 const globalErrorHandler = require('./controllers/errorController');
 
 // Create the app.
@@ -64,6 +65,7 @@ app.use((req, res, next) => {
 // Routes 👇🏻
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/reviews', reviewRouter);
 
 // Handled the not found routes.
 app.all('*', (req, res, next) => {

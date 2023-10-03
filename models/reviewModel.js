@@ -30,6 +30,20 @@ const reviewSchema = new mongoose.Schema({
     toObject: { virtuals: true }
 });
 
+// Middleware to populate the user and tour.
+reviewSchema.pre(/^find/, function(next) {
+    this.populate({
+        path: 'tour',
+        select: '-secretTour -__v'
+    });
+    this.populate({
+        path: 'user',
+        select: '-__v -passwordChangedAt'
+    });
+
+    next();
+});
+
 const Review = mongoose.model('Review', reviewSchema);
 
 module.exports = Review;
