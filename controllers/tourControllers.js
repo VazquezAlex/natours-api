@@ -28,50 +28,8 @@ const aliasTopTours = (req, res, next) => {
     next();
 }
 
-const getAllTours = catchAsync(async (req, res, next) => {
-    // Another way of filtering.
-    // const tours = await Tour.find().where('duration').equals(5).where('difficulty').equals('easy');
-    
-    const features =  
-        new APIFeatures(Tour.find(), req.query)
-            .filter()
-            .sort()
-            .limitFields()
-            .paginate();
-
-    const tours = await features.query;
-
-    return res.status(200).json({
-        status: 'success',
-        time: req.requestTime,
-        results: tours.length,
-        data: { 
-            tours: tours
-        }
-    });
-})
-
-const getTourById = catchAsync(async (req, res, next) => {
-
-    // Get the tour by id with mongoose.
-    const tour = await Tour.findById(req.params.id).populate('reviews');
-    // Another way of searching: Tour.findOne({ _id: req.params.id });
-
-    if (!tour) {
-        const error = new AppError('No tour found with that ID.', 404);
-
-        return next(error);
-    }
-
-    res.status(200).json({
-        status: 'success',
-        data: { 
-            tour: tour
-        }
-    });
-    
-})
-
+const getAllTours = factory.getAll(Tour);
+const getTourById = factory.getOne(Tour, { path: 'reviews' });
 const createTour = factory.createOne(Tour);
 const updateTour = factory.updateOne(Tour);
 const deleteTour = factory.deleteOne(Tour);

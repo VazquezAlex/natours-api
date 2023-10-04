@@ -12,31 +12,16 @@ const filterBody = (body, ...allowedFields) => {
     return filteredBody;
 }
 
-const getAllUsers = catchAsync(async (req, res) => {
-
-    const users = await User.find();
-
-    res.status(200).json({
-        status: 'success',
-        data: {
-            users
-        }
-    });
-})
+const getAllUsers = factory.getAll(User);
 
 const createUser = (req, res) => {
     res.status(500).json({
         status: 'error',
-        message: 'This route is not yet defined.'
+        message: 'This route is not yet defined! Please use /signup instead.'
     });
 }
 
-const getUser = (req, res) => {
-    res.status(500).json({
-        status: 'error',
-        message: 'This route is not yet defined.'
-    });
-}
+const getUser = factory.getOne(User);
 
 // Update the currently signed user.
 const updateMe = catchAsync(async (req, res, next) => {
