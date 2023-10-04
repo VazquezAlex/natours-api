@@ -10,6 +10,7 @@ const {
     updateMe,
     updateUser,
     deleteMe,
+    getMe,
 } = require('./../controllers/userController');
 
 const {
@@ -35,6 +36,7 @@ router.route('/')
     .get(getAllUsers)
     .post(createUser);
 
+router.get('/me', protect, getMe, getUser);
 router.patch('/updateMe', protect, updateMe);
 router.delete('/deleteMe', protect, deleteMe);
 

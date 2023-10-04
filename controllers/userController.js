@@ -59,9 +59,14 @@ const deleteMe = catchAsync(async (req, res, next) => {
     res.status(204).json({
         status: 'success',
         data: null,
-    })
-
+    });
 });
+
+const getMe = (req, res, next) => {
+    req.params.id = req.user.id;
+
+    next();
+};
 
 // Update any user, do not update passwords with this.
 const updateUser = factory.updateOne(User);
@@ -72,6 +77,7 @@ module.exports = {
     deleteMe,
     deleteUser,
     getAllUsers,
+    getMe,
     getUser,
     updateMe,
     updateUser,
