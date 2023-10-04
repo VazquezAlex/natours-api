@@ -72,44 +72,8 @@ const getTourById = catchAsync(async (req, res, next) => {
     
 })
 
-const createTour = catchAsync(async (req, res, next) => {
-
-    // Create the new doc with mongoose model.
-    const newTour = await Tour.create(req.body);
-
-    res.status(201).json({
-        status: "success",
-        data: {
-            tour: newTour
-        }
-    });
-})
-
-const updateTour = catchAsync(async (req, res, next) => {
-    
-    const tour = await Tour.findByIdAndUpdate(
-        req.params.id, // ID we are updating.
-        req.body,      // Data passed from the body.
-        {
-            new: true, // Returns the new document here.
-            runValidators: true,
-        }
-    )
-
-    if (!tour) {
-        const error = new AppError('No tour found with that ID.', 404);
-
-        return next(error);
-    }
-    
-    res.status(200).json({
-        status: 'success',
-        data: {
-            tour: tour
-        }
-    })
-})
-
+const createTour = factory.createOne(Tour);
+const updateTour = factory.updateOne(Tour);
 const deleteTour = factory.deleteOne(Tour);
 
 const getTourStats = catchAsync(async (req, res, next) => {

@@ -78,14 +78,8 @@ const deleteMe = catchAsync(async (req, res, next) => {
 
 });
 
-// Update any user.
-const updateUser = (req, res) => {
-    res.status(500).json({
-        status: 'error',
-        message: 'This route is not yet defined.'
-    });
-}
-
+// Update any user, do not update passwords with this.
+const updateUser = factory.updateOne(User);
 const deleteUser = factory.deleteOne(User);
 
 module.exports = {

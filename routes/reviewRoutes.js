@@ -6,16 +6,19 @@ const { protect, restrictTo } = require('../controllers/authController');
 const { 
     getAllReviews, 
     saveReview,
-    deleteReview, 
+    deleteReview,
+    updateReview,
+    setTourUserIds, 
 } = require('../controllers/reviewController');
 
 const router = express.Router({ mergeParams: true });
 
 router.route('/')
     .get(getAllReviews)
-    .post(protect, restrictTo('user'), saveReview);
+    .post(protect, restrictTo('user'), setTourUserIds, saveReview);
 
 router.route('/:id')
-    .delete(deleteReview);
+    .delete(deleteReview)
+    .patch(updateReview);
 
 module.exports = router;
