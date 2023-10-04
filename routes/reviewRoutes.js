@@ -14,13 +14,16 @@ const {
 
 const router = express.Router({ mergeParams: true });
 
+// Need user to be logged in, to access this routes.
+router.use(protect);
+
 router.route('/')
     .get(getAllReviews)
-    .post(protect, restrictTo('user'), setTourUserIds, saveReview);
+    .post(restrictTo('user'), setTourUserIds, saveReview);
 
 router.route('/:id')
     .get(getReview)
-    .delete(deleteReview)
-    .patch(updateReview);
+    .delete(restrictTo('user', 'admin'), deleteReview)
+    .patch(restrictTo('user', 'admin'), updateReview);
 
 module.exports = router;

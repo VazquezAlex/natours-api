@@ -29,21 +29,22 @@ const router = express.Router();
 router.use('/:tourId/reviews', reviewRouter);
 
 router.route('/tour-stats').get(getTourStats);
-router.route('/monthly-plan/:year').get(getMonthlyPlan);
+router.route('/monthly-plan/:year')
+    .get(protect, restrictTo('admin', 'guide', 'lead-guide'), getMonthlyPlan);
 
 router.route('/top-5-tours')
     .get(aliasTopTours, getAllTours)
 
 router.route('/')
-    .get(protect, getAllTours)
-    .post(checkPostBody, createTour);
+    .get(getAllTours)
+    .post(protect, restrictTo('admin', 'lead-guide'), checkPostBody, createTour);
 
 router.route('/:id')
     .get(getTourById)
-    .patch(updateTour)
+    .patch(protect, restrictTo('admin', 'lead-guide'), updateTour)
     .delete(
         protect,                       // We protect the route from un-signed users.
-        restrictTo('admin', 'guide'),  // We verify the user has access to this action.
+        restrictTo('admin', 'lead-guide'),  // We verify the user has access to this action.
         deleteTour                     // We execute the action on the route.
     );
 
