@@ -13,6 +13,7 @@ const {
     deleteTour,
     checkPostBody,
     getToursWithin,
+    getDistances,
 } = require('./../controllers/tourControllers');
 const { protect, restrictTo } = require('../controllers/authController');
 const reviewRouter = require('./../routes/reviewRoutes'); 
@@ -38,6 +39,9 @@ router.route('/top-5-tours')
 
 router.route('/tours-within/:distance/center/:latlng/unit/:unit')
     .get(getToursWithin);
+
+router.route('/distances/:latlng/unit/:unit')
+    .get(getDistances);
 
 router.route('/')
     .get(getAllTours)
