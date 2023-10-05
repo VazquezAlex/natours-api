@@ -31,6 +31,9 @@ const reviewSchema = new mongoose.Schema({
     toObject: { virtuals: true }
 });
 
+// Each combination of tour and user has to be unique.
+reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
+
 // Middleware to populate the user and tour.
 reviewSchema.pre(/^find/, function(next) {
     this.populate({ path: 'user', select: 'name photo' });
