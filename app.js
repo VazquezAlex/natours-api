@@ -1,3 +1,6 @@
+// Core modules.
+const path = require('path');
+
 // Third party modules.
 const express = require('express');
 const morgan = require('morgan');
@@ -16,6 +19,13 @@ const globalErrorHandler = require('./controllers/errorController');
 
 // Create the app.
 const app = express();
+
+// Use pug for server side rendering.
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+
+// Middle to serve static files.
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Middlewares 👇🏻.
 
@@ -53,9 +63,6 @@ app.use(
     })
 );
 
-// Middle to serve static files.
-app.use(express.static(`${ __dirname }/public`));
-
 // Updating the request object on our own middleware.
 app.use((req, res, next) => {
     req.requestTime = new Date().toISOString();
@@ -63,6 +70,13 @@ app.use((req, res, next) => {
 });
 
 // Routes 👇🏻
+
+// Server side rendering routes.
+app.get('/', (req, res) => {
+    res.status(200).render('base');
+});
+
+// API routes.
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
