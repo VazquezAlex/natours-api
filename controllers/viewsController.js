@@ -22,7 +22,7 @@ const getTour = catchAsync( async (req, res) => {
     });
 
     res.status(200).render('tour', {
-        title: 'The Forest Hiker Tour',
+        title: `${ tour.name } Tour`,
         tour
     });
 });
